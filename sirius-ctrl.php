@@ -19,7 +19,7 @@ You can test the MyApp application here: <a href="http://sirius-app1.cisco.com/i
 
 <?php
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if (($_SERVER["REQUEST_METHOD"] == "POST") && ($_POST["reset"] == "false")) {
 
   // Set some variables so that the form reflects the correct data
   $fefw = $_POST["FE"];
@@ -51,9 +51,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   print "<img src='" . $img . "'><br>";
 } else {
   // Dont initialize on any value, dont show any default value in the option buttons, otherwise
-  //    the user might think that is the current state of the fabric
+  //    the user might think that is the current state of the fabric (that is why the following
+  //    lines are commented).
   //$fefw = "No";
   //$befw = "No";
+
+  //Check whether we need to reset the VM custom attributes
+  if ($_POST["reset"] == "true") {
+    exec ("/usr/bin/bash /root/scripts/resetAtts.sh");
+  }
+
+  //Find out whether there is any service graphs in the contracts
   $fesg = shell_exec ("/usr/bin/python /root/asa-demo/get-sg.py http://192.168.0.50 admin C15co123 out-to-app1 Subject");
   $besg = shell_exec ("/usr/bin/python /root/asa-demo/get-sg.py http://192.168.0.50 admin C15co123 App1-T2-Services App1-T2-Svc");
   if (strlen($fesg) > 1) {
@@ -92,8 +100,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <input type="radio" name="BE" value="No" <?php if (isset($befw) && $befw=="No") echo "checked";?>>No Backend Firewall<br>
   <input type="radio" name="BE" value="Yes" <?php if (isset($befw) && $befw=="Yes") echo "checked";?>>Backend Firewall Inserted<br>
   <br>
+  <input type="hidden" name="reset" value="false">
   <input type="submit" value="Submit">
 </form>
+
+<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+  <br>
+  <br>
+  <br>
+  Push this button to reset custom attributes on Web VMs:
+  <input type="hidden" name="reset" value="true">
+  <input type="submit" value="Reset Attributes">
+
+</form>
+
 
 </td><td width='20%'></td></tr></table>
 </center></font>

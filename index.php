@@ -4,12 +4,12 @@
 </header>
 <body>
 <font face="verdana"><center>
-<img src="apic-dc_hero_banner.jpg">
+<img src="sirius.gif">
 <br>
 <table width='100%' border=0><tr><td width='20%'></td><td width='60%'>
 <h1>Testing an example 2-tier app</h1>
 <p>In the following text you should see two sections, one per tier (Web and DB). If one of the tiers is down, the page will take longer to load (the request to that 
-tier needs to time out, and eventually will show without that tier. If tier 2 is down, it doesnt matter whether tier 3 is up/down, that will not be shown.</p>
+tier needs to time out, and eventually will show without that tier.</p>
 
 <h2>Tier 1 - Web</h2>
 <p>You are seeing this page, so the tier 1 is working. The following WEB server is up and running: 172.18.1.11</p>
@@ -85,6 +85,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     echo "Error accessing the database, no name specified";
   }
 ?>
+
+<br><br>
+
+<p>Push the next button to simulate an attack to the Database going out of this Web server</p>
+<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+  <input type="hidden" id="name" name="name" value="xxx666xxx">
+  <img src="skull.png" width="40" height="40"><input type="submit" value="Attack DB"><img src="skull.png" width="40" height="40">
+</form>
+
 </td><td width='20%'></td></tr></table>
 </center></font>
 </body>

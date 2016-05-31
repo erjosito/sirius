@@ -65,33 +65,27 @@ for acl in acls:
 					if ace.key == 'AccessControlEntry':
 						folders = md.lookupByClass("vnsFolderInst", parentDn=ace.dn)
 						params = md.lookupByClass("vnsParamInst", parentDn=ace.dn)
-						action = ''
-						order = ''
 						for param in params:
 							if param.key == 'action':
 								action = param.value
 							elif param.key == 'order':
 								order = param.value
-						srcAdd = ''
-						dstAdd = ''
-						protocol = ''
-						operator = ''
-						port = ''						
-
 						for folder in folders:
 							params = md.lookupByClass("vnsParamInst", parentDn=folder.dn)
 							if folder.key == 'source_address':
 								for param in params:
 									if param.value:
-										srcAdd = param.value
+										srcAdd = param.value								
 							if folder.key == 'destination_address':
 								for param in params:
 									if param.value:
-										dstAdd = param.value
+										dstAdd = param.value								                                               protocol = ''
 							if folder.key == 'protocol':
 								for param in params:
 									if param.value:
-										protocol = param.value		
+										protocol = param.value								
+                                                        operator = ''
+                                                        port = ''
 							if folder.key == 'destination_service':
 								for param in params:
 									if param.key == 'operator':
@@ -101,5 +95,5 @@ for acl in acls:
 
 							
 						#print " - %s (%s): %s %s %s %s %s %s" % (ace.name, order, action, protocol, srcAdd, dstAdd, operator, port)
-						print "  <tr><td align='left'><input type='radio' name='rules' value='%s'></td><td align='center'>%s</td><td align='center'>%s</td><td align='center'>%s</td><td align='center'>%s</td></tr>" % (ace.name, order, ace.name, protocol, port)
+						print "  <tr><td><input type='radio' name='rules' value='%s'></td><td align='center'>%s</td><td align='center'>%s</td><td align='center'>%s</td><td align='center'>%s</td></tr>" % (ace.name, order, ace.name, protocol, port)
 print "</table>"
